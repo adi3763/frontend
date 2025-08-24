@@ -1,0 +1,23 @@
+/* Smooth spinning conic ring */
+.loader-ring{
+  width: 72px;
+  height: 72px;
+  border-radius: 9999px;
+  background:
+    conic-gradient(from 0deg,
+      #6366f1 0%,
+      #8b5cf6 20%,
+      #a78bfa 35%,
+      #c4b5fd 50%,
+      #e5e7eb 60%,
+      #e5e7eb 100%);
+  /* Hollow center */
+  -webkit-mask: radial-gradient(farthest-side, transparent 58%, #000 59%);
+          mask: radial-gradient(farthest-side, transparent 58%, #000 59%);
+  animation: loader-spin 0.9s linear infinite;
+  box-shadow: 0 0 0 6px rgba(99,102,241,0.08) inset;
+}
+
+@keyframes loader-spin{
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,54 @@
+/* Smooth hover for nav links */
+.navbar .nav-link {
+  color: #fff;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #ffc107; /* amber */
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+
+/* Icon buttons (right side) */
+.nav-icon-btn {
+  padding: 0.25rem 0.5rem;
+  color: #ffffffcc; /* slightly dimmed */
+  text-decoration: none;
+}
+
+.nav-icon-btn:hover,
+.nav-icon-btn:focus {
+  color: #fff;
+}
+
+.nav-icon {
+  display: block;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-icon-btn:hover .nav-icon {
+  transform: translateY(-1px) scale(1.06);
+  color: #ffc107;
+}
+
+/* Optional: reduce caption background strength on carousel */
+.hero-section .carousel-caption {
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+}
+
+.hero-section .carousel-item {
+  height: 850px; /* fixed height for all slides */
+}
+
+.hero-section .carousel-item img {
+  height: 100%;
+  width: 100%;
+  object-fit:fill; /* crop & fill */
+  object-position: center; /* center the image */
+}
+
+
