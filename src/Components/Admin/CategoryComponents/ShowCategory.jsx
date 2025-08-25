@@ -88,7 +88,7 @@ async function deletCategory( id) {
   </button>
 </div>
 
-
+<div>
 {loading && (
   <div className="flex items-center justify-center min-h-screen">
     <Spinner animation="border" role="status" />
@@ -123,10 +123,10 @@ async function deletCategory( id) {
                       <td className="px-5 py-3">{c.name}</td>
                       <td className="px-5 py-3">{c.status ? 'Active' : 'Inactive'}</td>
                       <td className="px-5 py-3">
-                       <button className="text-blue-500 mx-4" onClick={(e)=>{e.preventDefault();editHandler( c.id)}}>
+                       <button className="text-blue-500 mx-4" onClick={(e)=>{editHandler( c.id)}}>
         <FontAwesomeIcon icon={faEdit} className='text-2xl ' /> 
       </button >
-      <button onClick={()=>{deletCategory(c.id)}} className="text-red-500 ">
+      <button onClick={(e)=>{e.preventDefault();confirm("Are you sure you want to delete this category?") && deletCategory(c.id)}} className="text-red-500 ">
         <FontAwesomeIcon icon={faTrash} className='text-2xl ' /> 
       </button>
                       </td>
@@ -138,7 +138,7 @@ async function deletCategory( id) {
           </div>
         )}
 
-       
+       </div>
       </AdminLayout>
     </div>
   );

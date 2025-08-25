@@ -12,6 +12,7 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import ShowCategory from "./Components/Admin/CategoryComponents/ShowCategory";
 import EditCategory from "./Components/Admin/CategoryComponents/EditCategory";
 import CreateCategory from "./Components/Admin/CategoryComponents/CreateCategory";
+import ShowBrands from "./Components/Admin/BrandsComponents/ShowBrands";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/admin/categories" element={<ShowCategory />} />
           <Route path="/admin/category" element={<CreateCategory />} />
           <Route path="/admin/category/:id" element={<EditCategory />} />
+          <Route path="/admin/brands" element={<ShowBrands />} />
         </Route>
       </Routes>
     </AdminAuthProvider>
