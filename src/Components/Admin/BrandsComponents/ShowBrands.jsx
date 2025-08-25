@@ -76,7 +76,7 @@ useEffect(() => {
   </h1>
 
   <button className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-  onClick={()=>{navigate('/admin/category')}}
+  onClick={()=>{navigate('/admin/brand')}}
   >
     Create New Brands
   </button>
@@ -98,7 +98,7 @@ useEffect(() => {
         {!loading && !error && (
           <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             {data.length === 0 ? (
-              <p className="text-sm text-gray-500">No categories found.</p>
+              <p className="text-sm text-gray-500">No Brands found.</p>
             ) : (
               <table className="min-w-full text-sm">
                 <thead className="bg-gray-50 dark:bg-gray-900/40 text-gray-600 dark:text-gray-300">

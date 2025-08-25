@@ -13,6 +13,8 @@ import ShowCategory from "./Components/Admin/CategoryComponents/ShowCategory";
 import EditCategory from "./Components/Admin/CategoryComponents/EditCategory";
 import CreateCategory from "./Components/Admin/CategoryComponents/CreateCategory";
 import ShowBrands from "./Components/Admin/BrandsComponents/ShowBrands";
+import CreateBrands from "./Components/Admin/BrandsComponents/CreateBrands";
+import EditBrands from "./Components/Admin/BrandsComponents/EditBrands";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
           <Route path="/admin/category" element={<CreateCategory />} />
           <Route path="/admin/category/:id" element={<EditCategory />} />
           <Route path="/admin/brands" element={<ShowBrands />} />
+          <Route path="/admin/brand" element={<CreateBrands />} />
+          <Route path="/admin/brand/:id" element={<EditBrands />} />
         </Route>
       </Routes>
     </AdminAuthProvider>
