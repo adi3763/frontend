@@ -15,6 +15,9 @@ import CreateCategory from "./Components/Admin/CategoryComponents/CreateCategory
 import ShowBrands from "./Components/Admin/BrandsComponents/ShowBrands";
 import CreateBrands from "./Components/Admin/BrandsComponents/CreateBrands";
 import EditBrands from "./Components/Admin/BrandsComponents/EditBrands";
+import ShowProducts from "./Components/Admin/ProductsComponents/ShowProducts";
+import CreateProduct from "./Components/Admin/ProductsComponents/CreateProduct";
+import EditProduct from "./Components/Admin/ProductsComponents/EditProduct";
 
 function App() {
   return (
@@ -38,6 +41,9 @@ function App() {
           <Route path="/admin/brands" element={<ShowBrands />} />
           <Route path="/admin/brand" element={<CreateBrands />} />
           <Route path="/admin/brand/:id" element={<EditBrands />} />
+          <Route path="/admin/products" element={<ShowProducts />} />
+          <Route path="/admin/product" element={<CreateProduct />} />
+          <Route path="/admin/product/:id" element={<EditProduct />} />
         </Route>
       </Routes>
     </AdminAuthProvider>
