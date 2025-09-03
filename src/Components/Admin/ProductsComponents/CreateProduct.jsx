@@ -235,6 +235,7 @@ export default function CreateProduct() {
                       {c.name}
                     </option>
                   ))}
+                  
                 </select>
               </div>
 

@@ -1,14 +1,34 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AdminAuthContext } from '../Context/AdminAuthContext';
 import AdminLayout from './AdminCommon/AdminLayout';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { apiUrl } from '../Http';
 
 export default function Dashboard() {
+
+  const [productsCount, setProductsCount] = useState(0);
  const stats = [
     { title: "Users", value: 12, href: "/admin/users" },
     { title: "Orders", value: 5, href: "/admin/orders" },
-    { title: "Products", value: 42, href: "/admin/products" },
+    { title: "Products", value: productsCount, href: "/admin/products" },
   ];
+
+  async function countProducts() {
+    try {
+      const res = await axios.get(`${apiUrl}/admin/products/count`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
+      });
+      console.log("Fetched product count:", res.data);
+      setProductsCount(res?.data?.count || 0);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  
+  useEffect(() => {
+    countProducts();
+  }, []);
 
   const recent = [
     { id: "ORD-1005", customer: "Ankit Verma", total: "₹2,499", status: "Paid", date: "23 Aug" },
