@@ -5,7 +5,7 @@ import React from "react";
  * Usage:
  * <LoaderOverlay show={loading} message="Fetching categories..." />
  */
-export default function LoaderOverlay({ show = false, message = "Loading..." }) {
+export default function Spinner({ show = false, message = "Loading..." }) {
   if (!show) return null;
 
   return (

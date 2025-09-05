@@ -1,29 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import two from "../../assets/images/Mens/two.jpg";
+import axios from "axios";
+import { apiUrl } from "../Http";
+import { Link } from "react-router-dom";
 
 export default function Featured() {
-  const items = Array(8).fill({
-    img: two,
-    title: "Featured Title",
-    price: "$99.99",
-    oldPrice: "$123",
-  });
+  // const items = Array(8).fill({
+  //   img: two,
+  //   title: "Featured Title",
+  //   price: "$99.99",
+  //   oldPrice: "$123",
+  // });
+
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  async function fetchFeatured(){
+    try{
+      setLoading(true);
+      const res = await axios.get(`${apiUrl}/admin/featured-products`,{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem("adminToken")}`,
+        }
+      });
+
+      setItems(res.data.data);
+      console.log(res);
+      
+    }
+    catch(err){
+      console.error(err);
+      setError("Failed to fetch featured products");
+    }
+    finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    fetchFeatured();
+  },[]);
 
   return (
+    
     <div className="px-20 py-20 bg-gray-100">
+      
       <h2 className="text-3xl font-bold mb-12 text-gray-800 py-10">
          Featured Products
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
         {items.map((item, index) => (
+          <Link to={`/product/${item.id}`} key={index}>
           <div
-            key={index}
             className="bg-white border border-gray-200 shadow-md rounded-2xl overflow-hidden hover:shadow-2xl hover:border-yellow-400 transition duration-300"
           >
             <div className="relative group">
               <img
-                src={item.img}
+                src={item.primary_image_url}
                 alt={item.title}
                 className="w-full h-64 object-contain group-hover:scale-105 transition-transform duration-300"
               />
@@ -49,6 +84,7 @@ export default function Featured() {
               </button>
             </div>
           </div>
+          </Link>
         ))}
       </div>
     </div>
