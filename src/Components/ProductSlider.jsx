@@ -1,219 +1,154 @@
-"use client"
-
-
-import { useState } from "react"
-import { ChevronLeft, ChevronRight, Star } from "lucide-react"
+// ProductSlider.jsx
+import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-
-import image1 from "../assets/images/Mens/five.jpg";
-import image2 from "../assets/images/Mens/six.jpg";
-import image3 from "../assets/images/Mens/seven.jpg";
-import image4 from "../assets/images/Mens/eight.jpg";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { apiUrl } from "./Http";
 
 export default function ProductSlider() {
   const navigate = useNavigate();
-  const [currentImage, setCurrentImage] = useState(0)
-  const [selectedSize, setSelectedSize] = useState("M")
+  const { id } = useParams();
 
-  const product = {
-    name: "Dummy Product Title",
-    price: 20,
-    originalPrice: 18,
-    rating: 4,
-    reviews: 10,
-    images: [
-      image1,
-      image2,
-      image3,
-      image4
-    ],
-    sizes: ["S", "M", "L", "XL"],
-    features: ["100% Original Products", "Pay on delivery might be available", "Easy 15 days returns and exchanges"],
-    sku: "DDXX2234",
-  }
+  const [product, setProduct] = useState(null);
+  const [currentImage, setCurrentImage] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const nextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % product.images.length)
-  }
+  useEffect(() => {
+    async function showProductInfo() {
+      try {
+        const res = await axios.get(`${apiUrl}/admin/products/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        });
+        setProduct(res?.data?.data || null);
+        setCurrentImage(0);
+      } catch (err) {
+        console.error(err);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    showProductInfo();
+  }, [id]);
 
-  const prevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length)
-  }
+  if (loading) return <div className="p-6">Loading...</div>;
+  if (!product) return <div className="p-6 text-red-600">Product not found</div>;
 
-  const goToImage = (index) => {
-    setCurrentImage(index)
-  }
+  // Build images list: primary first, then others
+  const images = [
+    product.primary_image_url,
+    ...(Array.isArray(product.images) ? product.images.map((x) => x?.image_url).filter(Boolean) : []),
+  ].filter(Boolean);
+
+  const hasImages = images.length > 0;
 
   return (
     <div className="max-w-6xl mx-auto p-4 lg:p-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Left Side - Images */}
+        {/* Left: Images */}
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Thumbnails */}
           <div className="flex lg:flex-col gap-2 order-2 lg:order-1">
-            {product.images.map((image, index) => (
-              <button
-                key={index}
-                onClick={() => goToImage(index)}
-                className={`w-16 h-16 lg:w-20 lg:h-20 border-2 rounded overflow-hidden ${
-                  currentImage === index ? "border-blue-500" : "border-gray-200"
-                }`}
-              >
-                <img
-                  src={image || "/placeholder.svg"}
-                  alt={`Product view ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
+            {hasImages ? (
+              images.map((src, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImage(index)}
+                  className={`w-16 h-16 lg:w-20 lg:h-20 border-2 rounded overflow-hidden ${
+                    currentImage === index ? "border-blue-500" : "border-gray-200"
+                  }`}
+                  aria-label={`Go to image ${index + 1}`}
+                >
+                  <img
+                    src={src || "/placeholder.svg"}
+                    alt={`Product view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))
+            ) : (
+              <div className="text-sm text-gray-500 px-2 py-1">No images</div>
+            )}
           </div>
 
           {/* Main Image */}
           <div className="relative flex-1 order-1 lg:order-2">
-            <div className="relative aspect-square bg-gray-100 rounded overflow-hidden">
+            <div className="relative aspect-square bg-gray-100 rounded overflow-hidden flex items-center justify-center">
               <img
-                src={product.images[currentImage] || "/placeholder.svg"}
-                alt={product.name}
-                className="w-full h-full object-cover"
+                src={hasImages ? images[currentImage] : "/placeholder.svg"}
+                alt={product.title || "Product image"}
+                className="w-full h-full object-contain"
               />
-
-              {/* Navigation Arrows */}
-              <button
-                onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-
-              <button
-                onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
             </div>
           </div>
         </div>
 
-        {/* Right Side - Product Details */}
+        {/* Right: Details */}
         <div className="space-y-6">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+            {product.title || "Product"}
+          </h1>
 
-            {/* Rating */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex">
-                {[...Array(3)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${i < product.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-gray-600">{product.reviews} Reviews</span>
-            </div>
+          {/* Price */}
+          <div className="flex items-center gap-3">
+            <span className="text-3xl font-bold text-gray-900">₹{product.price ?? 0}</span>
+            {product.comparable_price ? (
+              <span className="text-xl text-gray-500 line-through">₹{product.comparable_price}</span>
+            ) : "Comparable Price"}
+          </div>
 
-            {/* Price */}
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-3xl font-bold text-gray-900">${product.price}</span>
-              <span className="text-xl text-gray-500 line-through">${product.originalPrice}</span>
-            </div>
+          <div className="flex items-center gap-3">
+            {product.description ? (
+              <span className="text-xl text-gray-500 line-through">₹{product.comparable_price}</span>
+            ) : "Product Description"}
+          </div>
 
-            {/* Features */}
-            <div className="space-y-2 mb-6">
-              {product.features.map((feature, index) => (
-                <p key={index} className="text-sm text-gray-600">
-                  {feature}
-                </p>
-              ))}
-            </div>
-
-            {/* Size Selection */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Select Size</h3>
-              <div className="flex gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`w-10 h-10 border rounded font-medium ${
-                      selectedSize === size
-                        ? "border-gray-900 bg-gray-900 text-white"
-                        : "border-gray-300 text-gray-700 hover:border-gray-400"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Add to Cart Button */}
-            <button className="w-full lg:w-auto bg-cyan-400 hover:bg-cyan-500 text-white px-8 py-3 rounded font-semibold mb-6"
-            onClick={() => navigate('/cart')}
-            >
-              ADD TO CART
-            </button>
-
-            {/* SKU */}
+          {/* SKU */}
+          {product.sku ? (
             <p className="text-sm text-gray-600">
               <span className="font-semibold">SKU:</span> {product.sku}
             </p>
-          </div>
+          ) : null}
+
+          <button
+            className="w-full lg:w-auto bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded font-semibold"
+            onClick={() => navigate("/cart")}
+          >
+            ADD TO CART
+          </button>
         </div>
       </div>
 
-      {/* Bottom Tabs */}
-      <div className="tab-switch">
-      <Tab.Container defaultActiveKey="description">
-        <Nav variant="tabs">
-          <Nav.Item>
-            <Nav.Link eventKey="description">Description</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="reviews">Reviews</Nav.Link>
-          </Nav.Item>
-        </Nav>
+      {/* Bottom Tabs (simple) */}
+      <div className="tab-switch mt-8">
+        <Tab.Container defaultActiveKey="description">
+          <Nav variant="tabs">
+            <Nav.Item>
+              <Nav.Link eventKey="description">Description</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="reviews">Reviews</Nav.Link>
+            </Nav.Item>
+          </Nav>
 
-        <Tab.Content className="p-3">
-          <Tab.Pane eventKey="description">
-            <div className="font-bold text-gray-900 mb-4 mt-2 px-1 py-2">{product.name}</div>
-
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-3xl font-bold text-gray-900">${product.price}</span>
-              <span className="text-xl text-gray-500 line-through">${product.originalPrice}</span>
-            </div>
-
-            <div className="space-y-2 mb-6">
-              {product.features.map((feature, index) => (
-                <p key={index} className="text-sm text-gray-600">
-                  {feature}
-                </p>
-              ))}
-            </div>
-          </Tab.Pane>
-
-          <Tab.Pane eventKey="reviews">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${
-                      i < product.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                    }`}
-                  />
-                ))}
+          <Tab.Content className="p-3">
+            <Tab.Pane eventKey="description">
+              <div className="font-bold text-gray-900 mb-4 mt-2 px-1 py-2">
+                {product.title || "Product"}
               </div>
-              <span className="text-sm text-gray-600">{product.reviews} Reviews</span>
-            </div>
-          </Tab.Pane>
-        </Tab.Content>
-      </Tab.Container>
-    </div>
+              <p className="text-sm text-gray-700 whitespace-pre-line">
+                {product.description || "No description available."}
+              </p>
+            </Tab.Pane>
 
-
+            <Tab.Pane eventKey="reviews">
+              <p className="text-sm text-gray-600">No reviews yet.</p>
+            </Tab.Pane>
+          </Tab.Content>
+        </Tab.Container>
+      </div>
     </div>
-  )
+  );
 }
