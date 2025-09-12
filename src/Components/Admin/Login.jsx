@@ -10,13 +10,21 @@ const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
-    
 
-    useEffect(() => {
+  useEffect(() => {
+    if (loading) return; // wait until auth state is known
+
     if (user) {
-      navigate("/admin/dashboard", { replace: true });
+      const role = user.role?.toLowerCase?.();
+      if (role === "admin" || role === "super_admin") {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
+
+  console.log(user);
 
   function changeHandler(e) {
     const { name, value } = e.target;

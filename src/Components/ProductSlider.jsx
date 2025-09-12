@@ -1,13 +1,16 @@
 // ProductSlider.jsx
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { apiUrl } from "./Http";
+import { CartContext } from "./Context/CartContext";
 
 export default function ProductSlider() {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const {setCartItems, addToCart } = useContext(CartContext);
 
   const [product, setProduct] = useState(null);
   const [currentImage, setCurrentImage] = useState(0);
@@ -23,6 +26,7 @@ export default function ProductSlider() {
         });
         setProduct(res?.data?.data || null);
         setCurrentImage(0);
+        
       } catch (err) {
         console.error(err);
         setProduct(null);
@@ -43,6 +47,14 @@ export default function ProductSlider() {
   ].filter(Boolean);
 
   const hasImages = images.length > 0;
+console.log(product);
+  function cartHandler(){
+   
+    addToCart({product_id:product.id, quantity:1, price:product.price});
+
+    navigate('/cart');
+  }
+
 
   return (
     <div className="max-w-6xl mx-auto p-4 lg:p-8">
@@ -114,7 +126,7 @@ export default function ProductSlider() {
 
           <button
             className="w-full lg:w-auto bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded font-semibold"
-            onClick={() => navigate("/cart")}
+            onClick={cartHandler}
           >
             ADD TO CART
           </button>

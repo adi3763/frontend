@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Layout from "./Common/Layout";
 import image1 from "../assets/images/Mens/five.jpg";
 import image2 from "../assets/images/Mens/six.jpg";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "./Context/CartContext";
 
 
 export default function Cart() {
     const navigate = useNavigate();
+
+    const {cartItems,getCartItems,removeCartItems,prod} = useContext(CartContext);
   // dummy data
+
+  useEffect( () => {
+   
+    getCartItems();
+    
+  
+  },[]);
   const items = [
     {
       id: 1,
@@ -27,7 +37,9 @@ export default function Cart() {
     },
   ];
 
-  const subtotal = items.reduce((s, it) => s + it.price * it.qty, 0);
+  console.log(cartItems);
+
+  const subtotal = cartItems.reduce((s, it) => s + it.price * it.quantity, 0);
   const shipping = 5;
   const total = subtotal + shipping;
 
@@ -48,7 +60,7 @@ export default function Cart() {
         {/* Left: Items */}
         <div className="lg:col-span-8">
           <div className="border-t">
-            {items.map((it, idx) => (
+            {cartItems.map((it, idx) => (
               <div
                 key={it.id}
                 className="grid grid-cols-12 items-center gap-4 border-b py-6"
@@ -56,16 +68,16 @@ export default function Cart() {
                 {/* Product cell */}
                 <div className="col-span-12 md:col-span-6 flex items-center gap-4">
                   <img
-                    src={it.img}
-                    alt={it.title}
+                    src={it.product.primary_image_url}
+                    alt={it.product.title}
                     className="w-[70px] h-[90px] object-cover rounded"
                   />
                   <div>
-                    <div className="text-gray-900 font-medium">{it.title}</div>
+                    <div className="text-gray-900 font-medium">{it.product.title}</div>
                     <div className="text-gray-800 mt-1">${it.price}</div>
                     <div className="mt-2">
                       <span className="inline-flex items-center justify-center rounded-md border px-3 py-1 text-sm text-gray-700">
-                        {it.size}
+                        {"S"}
                       </span>
                     </div>
                   </div>
@@ -76,8 +88,9 @@ export default function Cart() {
                   <input
                     type="number"
                     min="1"
-                    defaultValue={it.qty}
+                    defaultValue={it.quantity}
                     className="w-20 rounded-md border px-3 py-2 text-center outline-none focus:ring-1"
+                    readOnly
                   />
                 </div>
 

@@ -28,7 +28,7 @@ function NavbarComponent() {
           <Navbar.Collapse id="navbarScroll">
             {/* Left nav */}
             <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-              <Nav.Link as={Link} to="/men" className="px-3 fs-5">
+              <Nav.Link className="px-3 fs-5" onClick={() => {navigate('/shop')}}>
                 Men
               </Nav.Link>
               <Nav.Link as={Link} to="/women" className="px-3 fs-5">
@@ -63,7 +63,7 @@ function NavbarComponent() {
               <button
                 type="button"
                 className="btn btn-link nav-icon-btn me-lg-2"
-                aria-label="Cart" onClick={() => {navigate('/shop')}}
+                aria-label="Cart" 
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

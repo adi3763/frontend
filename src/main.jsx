@@ -12,11 +12,15 @@ import { ToastContainer } from 'react-toastify';
   /* The following line can be included in your src/index.js or App.js file */
 }
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CartContextProvider from './Components/Context/CartContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <ToastContainer />
+    <CartContextProvider>
     <App />
+
+    </CartContextProvider>
     
   </BrowserRouter>
 
