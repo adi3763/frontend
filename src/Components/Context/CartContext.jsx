@@ -33,16 +33,16 @@ export default function CartContextProvider({children}){
         });
 
         console.log(res.data);
-        setCartItems(res?.data.items || []);
+        setCartItems(res?.data?.items || []);
     }
 
     async function removeFromCart(itemId){
-        const res = await axios.delete(`${apiUrl}/cart/remove/${itemId}`,{
+        const res = await axios.delete(`${apiUrl}/cart/item/${itemId}`,{
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
               },
         });
-        setCartItems(res?.data?.items || []);
+setCartItems(cartItems.filter(item => item.id !== itemId));
     }
 
     const values = {
