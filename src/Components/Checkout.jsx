@@ -2,6 +2,9 @@ import React from "react";
 import image1 from "../assets/images/Mens/five.jpg";
 import { Link } from "react-router-dom";
 import Layout from "./Common/Layout";
+import AddAddress from "./AddressComponent/AddAddress";
+import AddressList from "./AddressComponent/AddressList";
+import CheckoutSummary from "./AddressComponent/CartCheckout";
 
 export default function Checkout() {
   const item = {
@@ -18,77 +21,19 @@ export default function Checkout() {
     <Layout>
       <div className="container mx-auto px-4 lg:px-6">
       {/* Breadcrumb */}
-      <div className="text-sm text-gray-500 mt-4 mb-6">
-       <Link to={'/'}> Home </Link>  <span className="mx-1">/</span>{" "}
-        <span className="text-gray-800">Checkout</span>
-      </div>
+      
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Left: Billing Details */}
-        <div className="lg:col-span-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-            Billing Details
-          </h2>
-          <div className="border-t pt-6">
-            {/* Row 1: Name / Email */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <input
-                type="text"
-                placeholder="Name"
-                className="w-full border rounded-md px-4 py-3"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full border rounded-md px-4 py-3"
-              />
-            </div>
-
-            {/* Address */}
-            <div className="mb-6">
-              <textarea
-                placeholder="Address"
-                rows={3}
-                className="w-full border rounded-md px-4 py-3"
-              />
-            </div>
-
-            {/* Row 2: City / State */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <input
-                type="text"
-                placeholder="City"
-                className="w-full border rounded-md px-4 py-3"
-              />
-              <input
-                type="text"
-                placeholder="State"
-                className="w-full border rounded-md px-4 py-3"
-              />
-            </div>
-
-            {/* Row 3: Zip / Phone */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input
-                type="text"
-                placeholder="Zip"
-                className="w-full border rounded-md px-4 py-3"
-              />
-              <input
-                type="tel"
-                placeholder="Phone"
-                className="w-full border rounded-md px-4 py-3"
-              />
-            </div>
-          </div>
-        </div>
+        {/* <AddAddress /> */}
+        <AddressList />
 
         {/* Right: Items + Payment */}
-        <div className="lg:col-span-4">
-          {/* Items */}
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">Items</h3>
+        {/* <div className="lg:col-span-4 mt-10 mb-10">
+          
+          <h3 className="text-xl font-semibold text-gray-900  mb-10">Items</h3>
           <div className="border-t pt-6">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start mt-5gap-4">
               <img
                 src={item.img}
                 alt={item.title}
@@ -100,7 +45,7 @@ export default function Checkout() {
               </div>
             </div>
 
-            {/* Totals */}
+           
             <div className="mt-6 border-b" />
             <div className="space-y-3 py-4">
               <div className="flex justify-between text-sm">
@@ -118,7 +63,7 @@ export default function Checkout() {
             </div>
           </div>
 
-          {/* Payment Methods */}
+       
           <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
             Payment Methods
           </h3>
@@ -138,9 +83,12 @@ export default function Checkout() {
               Pay Now
             </button>
           </div>
-        </div>
+        </div> */}
+
+<CheckoutSummary />
+
       </div>
-    </div>      
+      </div>
     </Layout>
 
     </>

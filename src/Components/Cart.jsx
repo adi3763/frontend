@@ -17,8 +17,17 @@ export default function Cart() {
   const subtotal = Array.isArray(cartItems)
     ? cartItems.reduce((s, it) => s + it.price * it.quantity, 0)
     : 0;
-  const shipping = 5;
+  const shipping = cartItems.length > 0 ? 5 : 0;
   const total = subtotal + shipping;
+
+  function checkoutHandler() {
+    if (cartItems.length > 0) {
+      navigate("/checkout");
+    }
+    else {
+      alert("Your cart is empty");
+    }
+  }
 
   return (
     <div>
@@ -114,7 +123,7 @@ export default function Cart() {
 
                 <button
                   className="mt-6 w-full rounded-md bg-teal-500 px-4 py-3 text-white hover:bg-teal-600"
-                  onClick={() => navigate("/checkout")}
+                  onClick={checkoutHandler}
                 >
                   Proceed To Checkout
                 </button>
